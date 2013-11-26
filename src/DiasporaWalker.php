@@ -69,15 +69,36 @@ class DiasporaWalker
         }
 
         $ch = curl_init();
-
+// echo "curl_init is " , $ch ; 
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //Set curl to return the data instead of printing it to the browser.
         curl_setopt($ch, CURLOPT_URL, $url);
+		
+		
+		curl_setopt ( $ch , CURLOPT_SSL_VERIFYPEER, 0 );
+        curl_setopt ( $ch , CURLOPT_SSL_VERIFYHOST, 0 );
 
         $content = curl_exec($ch);
-        curl_close($ch);
+	//	print curl_error($ch);	
 
+	
+// some added output for any troubles 
+if (curl_error($ch) <> '') {
+print '
+ROOT CAUSE ========>
+';
+print curl_error($ch)
+; 
+print '
+
+ VAR DUMP ========> '
+;
+}
+
+// echo " CURL content is ====>" , $url, $content ; 
         $this->cache[$url] = $content;
+// echo " THIS content is ====>" ; var_dump( $content );	
+
         return $content;
     }
 
@@ -287,3 +308,4 @@ class DiasporaWalker
     }
 
 }
+?>
